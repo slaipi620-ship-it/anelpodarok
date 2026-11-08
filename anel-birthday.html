@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>С днём рождения, Анель!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Nunito:wght@400;600;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#2a0f2e; --bg2:#5a1b4a; --rose:#ff7aa8; --peach:#ffb38a;
+    --gold:#ffd36e; --cream:#fff4e8; --ink:#2a0f2e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Nunito',sans-serif; color:var(--cream); overflow:hidden;
+    background:radial-gradient(1200px 800px at 20% 10%, #7a2a5e 0%, transparent 60%),
+               radial-gradient(900px 700px at 90% 90%, #8a3b2e 0%, transparent 55%),
+               linear-gradient(160deg,var(--bg1),var(--bg2));
+  }
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+  .stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+  .stars i{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;opacity:.6;animation:tw 3s infinite ease-in-out}
+  @keyframes tw{50%{opacity:.1;transform:scale(.5)}}
+
+  .page{
+    position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:24px 20px 90px;z-index:2;
+    opacity:0;visibility:hidden;transform:translateY(30px) scale(.98);
+    transition:opacity .7s ease,transform .7s ease,visibility .7s;
+  }
+  .page.active{opacity:1;visibility:visible;transform:none}
+  h1,h2{font-family:'Playfair Display',serif;line-height:1.1}
+  h1{font-size:clamp(42px,9vw,96px);
+     background:linear-gradient(90deg,var(--gold),var(--peach),var(--rose),var(--gold));
+     background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+     animation:shine 6s linear infinite}
+  @keyframes shine{to{background-position:300% 0}}
+  h2{font-size:clamp(30px,6vw,56px);color:var(--gold);margin-bottom:12px}
+  .hand{font-family:'Caveat',cursive;font-size:clamp(24px,4.5vw,38px);color:var(--peach)}
+  p.lead{max-width:620px;font-size:clamp(16px,2.4vw,20px);line-height:1.6;opacity:.92;margin:14px auto 0}
+
+  .btn{
+    margin-top:30px;font:800 18px 'Nunito',sans-serif;color:var(--ink);cursor:pointer;border:none;
+    padding:16px 38px;border-radius:999px;
+    background:linear-gradient(135deg,var(--gold),var(--peach) 55%,var(--rose));
+    box-shadow:0 10px 30px rgba(255,122,168,.35),inset 0 -3px 0 rgba(0,0,0,.12);
+    transition:transform .2s, box-shadow .2s;
+  }
+  .btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 16px 40px rgba(255,122,168,.5)}
+  .btn.ghost{background:transparent;color:var(--cream);border:2px solid rgba(255,244,232,.4);box-shadow:none}
+  .pulse{animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,211,110,.6)}50%{box-shadow:0 0 0 16px rgba(255,211,110,0)}}
+
+  /* navigation */
+  .nav{position:fixed;bottom:22px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:18px;z-index:10}
+  .dots{display:flex;gap:9px}
+  .dots span{width:9px;height:9px;border-radius:50%;background:rgba(255,244,232,.3);transition:.3s}
+  .dots span.on{background:var(--gold);width:26px;border-radius:9px}
+  .arrow{width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,244,232,.35);background:rgba(255,255,255,.06);
+         color:var(--cream);font-size:20px;cursor:pointer;transition:.2s}
+  .arrow:hover{background:rgba(255,255,255,.16)}
+  .arrow:disabled{opacity:0;pointer-events:none}
+
+  /* page 1 gift */
+  .gift{font-size:110px;cursor:pointer;animation:wiggle 2.2s infinite;display:inline-block;filter:drop-shadow(0 12px 25px rgba(0,0,0,.4))}
+  @keyframes wiggle{0%,100%{transform:rotate(0)}10%{transform:rotate(-12deg)}20%{transform:rotate(10deg)}30%{transform:rotate(-6deg)}40%{transform:rotate(0)}}
+  .balloons{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+  .balloon{position:absolute;bottom:-160px;width:60px;height:76px;border-radius:50% 50% 48% 48%;opacity:.85;animation:rise linear infinite}
+  .balloon::after{content:"";position:absolute;left:50%;top:100%;width:1px;height:70px;background:rgba(255,255,255,.4)}
+  @keyframes rise{to{transform:translateY(-130vh) translateX(40px) rotate(8deg)}}
+
+  /* page 2 cake */
+  .cake{position:relative;width:260px;height:230px;margin:26px auto 0}
+  .layer{position:absolute;left:50%;transform:translateX(-50%);border-radius:14px}
+  .l1{bottom:0;width:250px;height:80px;background:linear-gradient(#ff9fbf,#e2638f)}
+  .l2{bottom:72px;width:200px;height:70px;background:linear-gradient(#ffe0b8,#f2b07a)}
+  .l3{bottom:136px;width:150px;height:40px;background:linear-gradient(#fff,#ffd8e6)}
+  .drip{position:absolute;top:-4px;left:0;right:0;height:22px;border-radius:14px 14px 0 0;
+        background:radial-gradient(circle at 12px 18px,#fff 10px,transparent 11px) 0 0/28px 30px repeat-x, #fff}
+  .plate{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);width:290px;height:18px;border-radius:50%;background:rgba(255,255,255,.25)}
+  .candles{position:absolute;bottom:172px;left:50%;transform:translateX(-50%);display:flex;gap:22px}
+  .candle{width:12px;height:46px;border-radius:4px;cursor:pointer;position:relative;
+          background:repeating-linear-gradient(45deg,#fff 0 6px,var(--rose) 6px 12px)}
+  .flame{position:absolute;left:50%;top:-30px;width:16px;height:26px;margin-left:-8px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+         background:radial-gradient(circle at 50% 70%,#fff 0 20%,var(--gold) 40%,#ff7b2e 75%,transparent 80%);
+         animation:flick .15s infinite alternate;filter:drop-shadow(0 0 10px #ffb347)}
+  @keyframes flick{to{transform:scale(1.08,.94) rotate(3deg)}}
+  .candle.out .flame{display:none}
+  .smoke{position:absolute;left:50%;top:-20px;width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5);animation:smoke 1.2s forwards}
+  @keyframes smoke{to{transform:translate(-6px,-60px) scale(3);opacity:0}}
+  .wish-msg{min-height:44px;margin-top:22px}
+
+  /* page 3 kitchen */
+  .grid{display:grid;grid-template-columns:repeat(3,minmax(0,200px));gap:16px;margin-top:26px}
+  .card{perspective:900px;height:170px;cursor:pointer}
+  .card-in{position:relative;width:100%;height:100%;transition:transform .7s;transform-style:preserve-3d}
+  .card.flip .card-in{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+        padding:16px;backface-visibility:hidden;border:1px solid rgba(255,255,255,.15)}
+  .front{background:rgba(255,255,255,.08);backdrop-filter:blur(6px)}
+  .front b{font-size:56px}
+  .front small{margin-top:8px;opacity:.75}
+  .back{background:linear-gradient(135deg,var(--peach),var(--rose));color:var(--ink);transform:rotateY(180deg);font-weight:700;line-height:1.4}
+  .pot{font-size:84px;position:relative;display:inline-block}
+  .steam{position:absolute;top:-10px;left:50%;width:10px;height:30px;border-radius:50%;background:rgba(255,255,255,.35);filter:blur(4px);animation:steam 2.4s infinite}
+  .steam:nth-child(2){left:35%;animation-delay:.8s}.steam:nth-child(3){left:65%;animation-delay:1.6s}
+  @keyframes steam{0%{transform:translateY(0) scaleX(1);opacity:0}30%{opacity:1}100%{transform:translateY(-60px) scaleX(2);opacity:0}}
+
+  /* page 4 singing */
+  .mic{font-size:90px;cursor:pointer;display:inline-block;transition:transform .2s}
+  .mic:hover{transform:scale(1.1) rotate(-8deg)}
+  .eq{display:flex;gap:6px;justify-content:center;align-items:flex-end;height:70px;margin:18px 0}
+  .eq span{width:10px;border-radius:6px;background:linear-gradient(var(--gold),var(--rose));height:12px;transition:height .12s}
+  .eq.play span{animation:eq .6s infinite alternate ease-in-out}
+  @keyframes eq{0%{height:10px}100%{height:68px}}
+  .note{position:fixed;font-size:30px;pointer-events:none;z-index:3;animation:note 3s forwards ease-out;color:var(--gold)}
+  @keyframes note{to{transform:translate(var(--dx),-260px) rotate(30deg);opacity:0}}
+
+  /* page 5 letter */
+  .letter{max-width:640px;background:var(--cream);color:var(--ink);border-radius:18px;padding:34px 34px 30px;text-align:left;
+          box-shadow:0 30px 60px rgba(0,0,0,.35);position:relative;transform:rotate(-1deg)}
+  .letter::before{content:"💌";position:absolute;top:-28px;right:24px;font-size:50px}
+  .letter .typed{font-family:'Caveat',cursive;font-size:clamp(22px,3.6vw,30px);line-height:1.35;min-height:260px;white-space:pre-wrap}
+  .cursor{display:inline-block;width:2px;height:1em;background:var(--ink);vertical-align:-3px;animation:blink 1s infinite}
+  @keyframes blink{50%{opacity:0}}
+
+  /* page 6 final */
+  .big-heart{font-size:100px;animation:beat 1.2s infinite}
+  @keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.18)}30%{transform:scale(1)}45%{transform:scale(1.12)}}
+
+  @media (max-width:640px){
+    .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .card{height:150px}
+    .letter{padding:28px 22px}
+    .cake{transform:scale(.85)}
+  }
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+<div class="stars" id="stars"></div>
+<div class="balloons" id="balloons"></div>
+
+<!-- ============ СТРАНИЦА 1: ПРИВЕТСТВИЕ ============ -->
+<section class="page active" data-page>
+  <div class="hand">Для самой чудесной девушки…</div>
+  <h1>С днём рождения,<br>Анель!</h1>
+  <p class="lead">Сегодня твой день — и мы приготовили для тебя маленький сюрприз. Нажми на подарок 🎀</p>
+  <div style="margin-top:26px"><span class="gift" id="gift" title="Открой меня!">🎁</span></div>
+</section>
+
+<!-- ============ СТРАНИЦА 2: ТОРТ ============ -->
+<section class="page" data-page>
+  <h2>Загадай желание ✨</h2>
+  <p class="lead">Закрой глаза, загадай самое заветное — и задуй свечи (нажми на каждую).</p>
+  <div class="cake">
+    <div class="candles" id="candles">
+      <div class="candle"><div class="flame"></div></div>
+      <div class="candle"><div class="flame"></div></div>
+      <div class="candle"><div class="flame"></div></div>
+      <div class="candle"><div class="flame"></div></div>
+      <div class="candle"><div class="flame"></div></div>
+    </div>
+    <div class="layer l3"><div class="drip"></div></div>
+    <div class="layer l2"></div>
+    <div class="layer l1"></div>
+    <div class="plate"></div>
+  </div>
+  <div class="wish-msg hand" id="wishMsg"></div>
+</section>
+
+<!-- ============ СТРАНИЦА 3: КУХНЯ ============ -->
+<section class="page" data-page>
+  <div class="pot">🍲<span class="steam"></span><span class="steam"></span><span class="steam"></span></div>
+  <h2>Королева кухни 👩‍🍳</h2>
+  <p class="lead">Все, кто хоть раз пробовал твою еду, знают: у тебя золотые руки. Переверни карточки!</p>
+  <div class="grid">
+    <div class="card"><div class="card-in"><div class="face front"><b>🥘</b><small>нажми</small></div><div class="face back">Твоя еда — это когда хочется ещё одну тарелку. И ещё одну.</div></div></div>
+    <div class="card"><div class="card-in"><div class="face front"><b>🍰</b><small>нажми</small></div><div class="face back">Ни один ресторан не сравнится с тем, что готовишь ты.</div></div></div>
+    <div class="card"><div class="card-in"><div class="face front"><b>🧂</b><small>нажми</small></div><div class="face back">Твой главный секретный ингредиент — любовь. Это чувствуется!</div></div></div>
+    <div class="card"><div class="card-in"><div class="face front"><b>🍜</b><small>нажми</small></div><div class="face back">Пусть кухня всегда будет местом вдохновения, а не обязанности.</div></div></div>
+    <div class="card"><div class="card-in"><div class="face front"><b>🫖</b><small>нажми</small></div><div class="face back">Чай с тобой — лучший повод отложить все дела.</div></div></div>
+    <div class="card"><div class="card-in"><div class="face front"><b>⭐</b><small>нажми</small></div><div class="face back">Мишленовские звёзды? Тебе уже давно пора!</div></div></div>
+  </div>
+</section>
+
+<!-- ============ СТРАНИЦА 4: ПЕНИЕ ============ -->
+<section class="page" data-page>
+  <span class="mic" id="mic" title="Нажми!">🎤</span>
+  <h2>Голос, от которого мурашки</h2>
+  <div class="eq" id="eq"></div>
+  <p class="lead">Когда ты поёшь — весь мир замолкает и слушает. Сегодня споём для тебя мы! Нажми на микрофон 🎶</p>
+</section>
+
+<!-- ============ СТРАНИЦА 5: ПИСЬМО ============ -->
+<section class="page" data-page>
+  <div class="letter"><div class="typed" id="typed"></div></div>
+</section>
+
+<!-- ============ СТРАНИЦА 6: ФИНАЛ (кнопка «Далее») ============ -->
+<section class="page" data-page>
+  <div class="big-heart">💖</div>
+  <h1 style="font-size:clamp(36px,7vw,72px)">Будь счастлива, Анель!</h1>
+  <p class="lead">Пусть этот год будет вкусным, как твои блюда, и звонким, как твой голос.</p>
+  <p class="hand" style="margin-top:18px">Но это ещё не всё…</p>
+  <button class="btn pulse" id="finalNext">Далее →</button>
+</section>
+
+<!-- ================================================================
+     ✏️ ТВОЯ СТРАНИЦА — сюда ведёт кнопка «Далее» с последней страницы.
+     Замени текст ниже на свой: заголовок, поздравление, фото и т.д.
+     Фото можно вставить так: <img src="ссылка-или-data-URI" style="max-width:300px;border-radius:20px">
+     ================================================================ -->
+<section class="page" data-page id="myPage">
+  <h2>С днем рождения анель от Юлдаша</h2>
+  <p class="lead">поздравляю тебя ты самая лучшая подруга ты обязательно исего добешься</p>
+  <button class="btn ghost" id="restart">от твоего самого наилудчшего и умного и красивого друга😋😅</button>
+</section>
+
+<nav class="nav">
+  <button class="arrow" id="prev" aria-label="Назад">←</button>
+  <div class="dots" id="dots"></div>
+  <button class="arrow" id="next" aria-label="Вперёд">→</button>
+</nav>
+
+<script>
+/* ---------- фон: звёзды и шарики ---------- */
+const stars=document.getElementById('stars');
+for(let i=0;i<70;i++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=Math.random()*3+'s';stars.appendChild(s);}
+const balloons=document.getElementById('balloons');
+const bColors=['#ff7aa8','#ffd36e','#ffb38a','#c58bff','#7fd6ff'];
+for(let i=0;i<10;i++){const b=document.createElement('div');b.className='balloon';b.style.left=Math.random()*95+'%';
+  b.style.background=`radial-gradient(circle at 30% 30%,#fff8,${bColors[i%5]} 40%)`;
+  b.style.animationDuration=(12+Math.random()*10)+'s';b.style.animationDelay=(-Math.random()*20)+'s';balloons.appendChild(b);}
+
+/* ---------- конфетти ---------- */
+const cv=document.getElementById('confetti'),ctx=cv.getContext('2d');let parts=[];
+function size(){cv.width=innerWidth;cv.height=innerHeight}size();addEventListener('resize',size);
+function burst(n=180,x=innerWidth/2,y=innerHeight/2){
+  const cols=['#ffd36e','#ff7aa8','#ffb38a','#fff4e8','#c58bff','#7fd6ff'];
+  for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=4+Math.random()*9;
+    parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-6,r:4+Math.random()*6,c:cols[i%cols.length],rot:Math.random()*6,vr:(Math.random()-.5)*.3,life:160});}
+}
+(function loop(){ctx.clearRect(0,0,cv.width,cv.height);
+  parts=parts.filter(p=>p.life>0);
+  for(const p of parts){p.vy+=.22;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.life--;
+    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=Math.min(1,p.life/40);ctx.fillStyle=p.c;ctx.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);ctx.restore();}
+  requestAnimationFrame(loop);})();
+
+/* ---------- навигация ---------- */
+const pages=[...document.querySelectorAll('[data-page]')];
+const dots=document.getElementById('dots');let cur=0;
+const MAIN=pages.length-1; // последняя (твоя) страница открывается только кнопкой «Далее»
+for(let i=0;i<MAIN;i++){dots.appendChild(document.createElement('span'))}
+function go(i){
+  if(i<0||i>=pages.length)return;
+  pages[cur].classList.remove('active');cur=i;pages[cur].classList.add('active');
+  [...dots.children].forEach((d,k)=>d.classList.toggle('on',k===Math.min(cur,MAIN-1)));
+  document.getElementById('prev').disabled=cur===0;
+  document.getElementById('next').disabled=cur>=MAIN-1;
+  document.querySelector('.nav').style.display=cur===MAIN?'none':'flex';
+  if(cur===4)typeLetter();
+  if(cur===MAIN-1)setTimeout(()=>burst(220),400);
+}
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.getElementById('next').onclick=()=>go(cur+1);
+addEventListener('keydown',e=>{if(e.key==='ArrowRight'&&cur<MAIN-1)go(cur+1);if(e.key==='ArrowLeft'&&cur<MAIN)go(cur-1)});
+document.getElementById('finalNext').onclick=()=>{burst(150);go(MAIN)};
+document.getElementById('restart').onclick=()=>go(0);
+go(0);
+
+/* ---------- 1: подарок ---------- */
+document.getElementById('gift').onclick=e=>{burst(220,e.clientX,e.clientY);setTimeout(()=>go(1),900)};
+
+/* ---------- 2: свечи ---------- */
+const candles=[...document.querySelectorAll('.candle')];
+candles.forEach(c=>c.onclick=()=>{
+  if(c.classList.contains('out'))return;c.classList.add('out');
+  const s=document.createElement('div');s.className='smoke';c.appendChild(s);
+  if(candles.every(x=>x.classList.contains('out'))){
+    document.getElementById('wishMsg').textContent='Желание обязательно сбудется! 🌟';
+    const r=document.querySelector('.cake').getBoundingClientRect();burst(200,r.left+r.width/2,r.top);
+  }
+});
+
+/* ---------- 3: карточки ---------- */
+document.querySelectorAll('.card').forEach(c=>c.onclick=()=>c.classList.toggle('flip'));
+
+/* ---------- 4: микрофон и мелодия ---------- */
+const eq=document.getElementById('eq');
+for(let i=0;i<16;i++){const s=document.createElement('span');s.style.animationDelay=(Math.random()*.6)+'s';eq.appendChild(s)}
+let playing=false;
+function playHB(){
+  if(playing)return;playing=true;eq.classList.add('play');
+  let ac;try{ac=new (window.AudioContext||window.webkitAudioContext)()}catch(e){playing=false;eq.classList.remove('play');return}
+  const N={G4:392,A4:440,B4:493.9,C5:523.3,D5:587.3,E5:659.3,F5:698.5,G5:784};
+  const tune=[['G4',.75],['G4',.25],['A4',1],['G4',1],['C5',1],['B4',2],
+              ['G4',.75],['G4',.25],['A4',1],['G4',1],['D5',1],['C5',2],
+              ['G4',.75],['G4',.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2],
+              ['F5',.75],['F5',.25],['E5',1],['C5',1],['D5',1],['C5',2.5]];
+  const beat=.42;let t=ac.currentTime+.1;
+  for(const [n,d] of tune){
+    const o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.value=N[n];
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.25,t+.03);g.gain.exponentialRampToValueAtTime(.001,t+d*beat*.95);
+    o.connect(g).connect(ac.destination);o.start(t);o.stop(t+d*beat);t+=d*beat;
+  }
+  const total=(t-ac.currentTime)*1000;
+  const iv=setInterval(spawnNote,250);
+  setTimeout(()=>{clearInterval(iv);eq.classList.remove('play');playing=false;ac.close()},total);
+}
+function spawnNote(){
+  const m=document.getElementById('mic').getBoundingClientRect();
+  const n=document.createElement('div');n.className='note';n.textContent=['♪','♫','♬','🎵'][Math.random()*4|0];
+  n.style.left=(m.left+m.width/2-10)+'px';n.style.top=m.top+'px';n.style.setProperty('--dx',(Math.random()*240-120)+'px');
+  document.body.appendChild(n);setTimeout(()=>n.remove(),3000);
+}
+document.getElementById('mic').onclick=playHB;
+
+/* ---------- 5: письмо ---------- */
+const letterText=`Дорогая Анель!
+
+С днём рождения! 🎂
+
+Ты из тех людей, рядом с которыми тепло: твоя еда собирает всех за одним столом, а твой голос заставляет забыть обо всём на свете.
+
+Желаю тебе здоровья, любви, исполнения всех мечт и много-много поводов петь от счастья. Пусть рядом всегда будут люди, которые ценят тебя так же сильно, как мы.
+
+Обнимаю крепко! ❤️`;
+let typedDone=false,typing=false;
+function typeLetter(){
+  if(typedDone||typing)return;typing=true;
+  const el=document.getElementById('typed');let i=0;
+  const cur=document.createElement('span');cur.className='cursor';
+  (function step(){
+    el.textContent=letterText.slice(0,i);el.appendChild(cur);
+    if(i<letterText.length){const ch=letterText[i];i++;setTimeout(step,ch==='\n'?220:28)}
+    else{typedDone=true;typing=false}
+  })();
+}
+</script>
+</body>
+</html>
